@@ -53,7 +53,7 @@ public class MovimentoEstoqueService {
                         : dto.valorVenda())
                 .dataVenda(dto.tipoMovimentacao() == TipoMovimentacao.ENTRADA
                         ? null
-                        : (dto.dataVenda() != null ? dto.dataVenda() : LocalDate.now()))
+                        : (dto.dataVenda() != null ? dto.dataVenda() : LocalDate.now(java.time.ZoneId.of("America/Sao_Paulo"))))
                 .quantidadeMovimentada(quantidade)
                 .build();
 
