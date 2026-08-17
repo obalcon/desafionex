@@ -177,11 +177,15 @@ const registrar = async () => {
 const formatarValor = (valor: number) => {
   return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
-
+/*
 const formatarData = (data: string) => {
   return new Date(data).toLocaleDateString('pt-BR')
 }
-
+*/
+const formatarData = (data: string) => {
+  const [ano, mes, dia] = data.split('-')
+  return `${dia}/${mes}/${ano}`
+}
 onMounted(() => {
   carregarProdutos()
 })
