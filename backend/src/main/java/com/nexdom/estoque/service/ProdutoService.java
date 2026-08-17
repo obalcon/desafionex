@@ -91,18 +91,18 @@ public class ProdutoService {
     @Transactional(readOnly = true)
     public List<ProdutoTipoDTO> consultarPorTipo(TipoProduto tipo) {
         return produtoRepository.findByTipoProduto(tipo)
-                .stream()
-                .map(p -> new ProdutoTipoDTO(
-                        p.getId(),
-                        p.getCodigo(),
-                        p.getDescricao(),
-                        p.getTipoProduto(),
-                        p.getQuantidadeEstoque(),
-                        movimentoRepository.countSaidasByProdutoId(p.getId())
-                ))
-                .toList();
+            .stream()
+            .map(p -> new ProdutoTipoDTO(
+                p.getId(),
+                p.getCodigo(),
+                p.getDescricao(),
+                p.getTipoProduto(),
+                p.getValorFornecedor(),
+                p.getQuantidadeEstoque(),
+                movimentoRepository.countSaidasByProdutoId(p.getId())
+            ))
+            .toList();
     }
-
     @Transactional(readOnly = true)
     public LucroProdutoDTO consultarLucro(Long produtoId) {
         Produto produto = produtoRepository.findById(produtoId)
