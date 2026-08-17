@@ -24,7 +24,7 @@
         </div>
 
         <div class="form-group">
-          <label>Tipo</label>
+          <label>Tipo de Produto</label>
           <select v-model="produto.tipoProduto" required>
             <option value="ELETRONICO">Eletrônico</option>
             <option value="ELETRODOMESTICO">Eletrodoméstico</option>
@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group">
-          <label>Valor do Fornecedor (R$)</label>
+          <label>Valor no Fornecedor (R$)</label>
           <input
             v-model.number="produto.valorFornecedor"
             type="number"

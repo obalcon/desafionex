@@ -37,7 +37,7 @@
         </div>
 
         <div class="form-group" v-if="movimento.tipoMovimentacao === 'SAIDA'">
-          <label>Valor Total da Venda (R$)</label>
+          <label>Valor de Venda (R$)</label>
           <input
             v-model.number="movimento.valorVenda"
             type="number"
@@ -65,10 +65,10 @@
         <thead>
           <tr>
             <th>Produto</th>
-            <th>Tipo</th>
-            <th>Qtd</th>
-            <th>Valor Venda</th>
-            <th>Data</th>
+            <th>Tipo Movimentação</th>
+            <th>Quantidade movimentada</th>
+            <th>Valor de Venda</th>
+            <th>Data de venda</th>
           </tr>
         </thead>
         <tbody>
@@ -168,20 +168,17 @@ const registrar = async () => {
 
     carregarProdutos()
     if (produtoIdAtual) carregarMovimentos(produtoIdAtual)
-  } catch {
+  } catch (error: unknown) {
     tipoMensagem.value = 'erro'
-    mensagem.value = 'Erro ao registrar movimentação.'
+    const err = error as { response?: { data?: { message?: string } } }
+    mensagem.value = err.response?.data?.message || 'Erro ao registrar movimentação.'
   }
 }
 
 const formatarValor = (valor: number) => {
   return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
-/*
-const formatarData = (data: string) => {
-  return new Date(data).toLocaleDateString('pt-BR')
-}
-*/
+
 const formatarData = (data: string) => {
   const [ano, mes, dia] = data.split('-')
   return `${dia}/${mes}/${ano}`
