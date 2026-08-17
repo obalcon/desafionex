@@ -1,17 +1,23 @@
 package com.nexdom.estoque.service;
 
-import com.nexdom.estoque.dto.*;
-import com.nexdom.estoque.enums.TipoProduto;
-import com.nexdom.estoque.model.Produto;
-import com.nexdom.estoque.repository.MovimentoEstoqueRepository;
-import com.nexdom.estoque.repository.ProdutoRepository;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.List;
+import com.nexdom.estoque.dto.LucroProdutoDTO;
+import com.nexdom.estoque.dto.ProdutoRequestDTO;
+import com.nexdom.estoque.dto.ProdutoResponseDTO;
+import com.nexdom.estoque.dto.ProdutoTipoDTO;
+import com.nexdom.estoque.enums.TipoProduto;
+import com.nexdom.estoque.model.MovimentoEstoque;
+import com.nexdom.estoque.model.Produto;
+import com.nexdom.estoque.repository.MovimentoEstoqueRepository;
+import com.nexdom.estoque.repository.ProdutoRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -68,10 +74,18 @@ public class ProdutoService {
 
     @Transactional
     public void deletar(Long id) {
-        if (!produtoRepository.existsById(id)) {
-            throw new EntityNotFoundException("Produto não encontrado");
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
+
+        List<MovimentoEstoque> movimentos = movimentoRepository.findByProduto(produto);
+        if (!movimentos.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Não é possível excluir o produto '" + produto.getCodigo() + 
+                "' pois existem movimentações de estoque vinculadas a ele."
+            );
         }
-        produtoRepository.deleteById(id);
+
+        produtoRepository.delete(produto);
     }
 
     @Transactional(readOnly = true)
